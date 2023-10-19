@@ -27,7 +27,7 @@ bool obs_module_load(void)
 {
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
 		PLUGIN_VERSION);
-    translate();
+	translate();
 	return true;
 }
 
