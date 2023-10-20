@@ -1,4 +1,3 @@
-
 set(CppHTTPLib_URL "https://github.com/yhirose/cpp-httplib/archive/refs/tags/v0.14.1.tar.gz")
 set(CppHTTPLib_HASH SHA256=2D4FB5544DA643E5D0A82585555D8B7502B4137EB321A4ABBB075E21D2F00E96)
 
