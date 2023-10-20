@@ -1,172 +1,107 @@
-# OBS Plugin Template
+#  - Speech AI assistant OBS Plugin
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/github/license/obs-ai/obs-polyglot)](https://github.com/obs-ai/obs-polyglot/blob/main/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/obs-ai/obs-polyglot/push.yaml)](https://github.com/obs-ai/obs-polyglot/actions/workflows/push.yaml)
+[![Total downloads](https://img.shields.io/github/downloads/obs-ai/obs-polyglot/total)](https://github.com/obs-ai/obs-polyglot/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/obs-ai/obs-polyglot)](https://github.com/obs-ai/obs-polyglot/releases)
+
+</div>
 
 ## Introduction
 
-The plugin template is meant to be used as a starting point for OBS Studio plugin development. It includes:
+Polyglot translation AI plugin allows you to translate, locally on your machine, text in multiple languages. ✅ No GPU required, ✅ no cloud costs, ✅ no network and ✅ no downtime! Privacy first - all data stays on your machine.
 
-* Boilerplate plugin source code
-* A CMake project file
-* GitHub Actions workflows and repository actions
+It's using the excellent [CTranslate2](https://github.com/OpenNMT/CTranslate2) project from OpenNMT.
 
-## Set Up
+If this free plugin has been valuable to you consider adding a ⭐ to this GH repo, subscribing to [my YouTube channel](https://www.youtube.com/@royshilk) where I post updates, and supporting my work: https://github.com/sponsors/royshil
 
-The plugin project is set up using the included `buildspec.json` file. The following fields should be customized for an actual plugin:
+Current Features:
+- Translate in real time using an internal HTTP server
+- Choice of CTranslate2 model file
 
-* `name`: The plugin name
-* `version`: The plugin version
-* `author`: Actual name or nickname of the plugin's author
-* `website`: URL of a website associated with the plugin
-* `email`: Contact email address associated with the plugin
-* `uuids`
-    * `macosPackage`: Unique (**!**) identifier for the macOS plugin package
-    * `macosInstaller`: Unique (**!**) identifier for the macOS plugin installer
-    * `windowsApp`: Unique (**!**) identifier for the Windows plugin installer
+Roadmap:
+- Translation directly on OBS text sources
 
-These values are read and processed automatically by the CMake build scripts, so no further adjustments in other files are needed.
+Check out our other plugins:
+- [Background Removal](https://github.com/royshil/obs-backgroundremoval) removes background from webcam without a green screen.
+- 🚧 Experimental 🚧 [CleanStream](https://github.com/obs-ai/obs-cleanstream) for real-time filler word (uh,um) and profanity removal from live audio stream
+- [URL/API Source](https://github.com/obs-ai/obs-urlsource) that allows fetching live data from an API and displaying it in OBS.
+- [LocalVocal](https://github.com/royshil/obs-localvocal) speech AI assistant plugin for real-time transcription (captions), translation and more language functions
 
-### Platform Configuration
 
-Platform-specific settings are set up in the `platformConfig` section of the buildspec file:
+## Download
+Check out the [latest releases](https://github.com/obs-ai/obs-polyglot/releases) for downloads and install instructions.
 
-* `bundleId`: macOS bundle identifier for the plugin. Should be unique and follow reverse domain name notation.
+## Building
 
-### Set Up Build Dependencies
+The plugin was built and tested on Mac OSX  (Intel & Apple silicon), Windows and Linux.
 
-Just like OBS Studio itself, plugins need to be built using dependencies available either via the `obs-deps` repository (Windows and macOS) or via a distribution's package system (Linux).
+Start by cloning this repo to a directory of your choice.
 
-#### Choose An OBS Studio Version
+Remember to sync and fetch the submodules before building, e.g.
+```sh
+$ git submodule sync --recursive
+$ git update --init --recursive
+```
 
-By default the plugin template specifies the most current official OBS Studio version in the `buildspec.json` file, which makes most sense for plugins at the start of development. As far as updating the targeted OBS Studio version is concerned, a few things need to be considered:
+### Mac OSX
 
-* Plugins targeting _older_ versions of OBS Studio should _generally_ also work in newer versions, with the exception of breaking changes to specific APIs which would also be explicitly called out in release notes
-* Plugins targeting the _latest_ version of OBS Studio might not work in older versions because the internal data structures used by `libobs` might not be compatible
-* Users are encouraged to always update to the most recent version of OBS Studio available within a reasonable time after release - plugin authors have to choose for themselves if they'd rather keep up with OBS Studio releases or stay with an older version as their baseline (which might of course preclude the plugin from using functionality introduced in a newer version)
+Using the CI pipeline scripts, locally you would just call the zsh script. By default this builds a universal binary for both Intel and Apple Silicon. To build for a specific architecture please see `.github/scripts/.build.zsh` for the `-arch` options.
 
-On Linux, the version used for development might be decided by the specific version available via a distribution's package management system, so OBS Studio compatibility for plugins might be determined by those versions instead.
+```sh
+$ ./.github/scripts/build-macos -c Release
+```
 
-#### Windows and macOS
+#### Install
+The above script should succeed and the plugin files (e.g. `obs-urlsource.plugin`) will reside in the `./release/Release` folder off of the root. Copy the `.plugin` file to the OBS directory e.g. `~/Library/Application Support/obs-studio/plugins`.
 
-Windows and macOS dependency downloads are configured in the `buildspec.json` file:
+To get `.pkg` installer file, run for example
+```sh
+$ ./.github/scripts/package-macos -c Release
+```
+(Note that maybe the outputs will be in the `Release` folder and not the `install` folder like `pakage-macos` expects, so you will need to rename the folder from `build_x86_64/Release` to `build_x86_64/install`)
 
-* `dependencies`:
-    * `obs-studio`: Version of OBS Studio to build plugin with (needed for `libobs` and `obs-frontend-api`)
-    * `prebuilt`: Prebuilt OBS Studio dependencies
-    * `qt6`: Prebuilt version of Qt6 as used by OBS Studio
-* `tools`: Contains additional build tools used by CI
+### Linux (Ubuntu)
 
-The values should be kept in sync with OBS Studio releases and the `buildspec.json` file in use by the main project to ensure that the plugin is developed and built in sync with its target environment.
+Use the CI scripts again
+```sh
+$ ./.github/scripts/build-linux.sh
+```
 
-To update a dependency, change the `version` and associated `hashes` entries to match the new version. The used hash algorithm is `sha256`.
+Copy the results to the standard OBS folders on Ubuntu
+```sh
+$ sudo cp -R release/RelWithDebInfo/lib/* /usr/lib/x86_64-linux-gnu/
+$ sudo cp -R release/RelWithDebInfo/share/* /usr/share/
+```
+Note: The official [OBS plugins guide](https://obsproject.com/kb/plugins-guide) recommends adding plugins to the `~/.config/obs-studio/plugins` folder.
 
-#### Linux
+### Windows
 
-Linux dependencies need to be resolved using the package management tools appropriate for the local distribution. As an example, building on Ubuntu requires the following packages to be installed:
+Use the CI scripts again, for example:
 
-* Build System Dependencies:
-    * `cmake`
-    * `ninja-build`
-    * `pkg-config`
-* Build Dependencies:
-    * `build-essential`
-    * `libobs-dev`
-* Qt6 Dependencies:
-    * `qt6-base-dev`
-    * `libqt6svg6-dev`
-    * `qt6-base-private-dev`
+```powershell
+> .github/scripts/Build-Windows.ps1 -Target x64 -CMakeGenerator "Visual Studio 17 2022"
+```
 
-## Build System Configuration
+The build should exist in the `./release` folder off the root. You can manually install the files in the OBS directory.
 
-To create a build configuration, `cmake` needs to be installed on the system. The plugin template supports CMake presets using the `CMakePresets.json` file and ships with default presets:
+<!-- #### Building with CUDA support on Windows
 
-* `macos`
-    * Universal architecture (supports Intel-based CPUs as Apple Silicon)
-    * Defaults to Qt version `6`
-    * Defaults to macOS deployment target `11.0`
-* `macos-ci`
-    * Inherits from `macos`
-    * Enables compile warnings as error
-* `windows-x64`
-    * Windows 64-bit architecture
-    * Defaults to Qt version `6`
-    * Defaults to Visual Studio 17 2022
-    * Defaults to Windows SDK version `10.0.18363.657`
-* `windows-ci-x64`
-    * Inherits from `windows-x64`
-    * Enables compile warnings as error
-* `linux-x86_64`
-    * Linux x86_64 architecture
-    * Defaults to Qt version `6`
-    * Defaults to Ninja as build tool
-    * Defaults to `RelWithDebInfo` build configuration
-* `linux-ci-x86_64`
-    * Inherits from `linux-x86_64`
-    * Enables compile warnings as error
-* `linux-aarch64`
-    * Provided as an experimental preview feature
-    * Linux aarch64 (ARM64) architecture
-    * Defaults to Qt version `6`
-    * Defaults to Ninja as build tool
-    * Defaults to `RelWithDebInfo` build configuration
-* `linux-ci-aarch64`
-    * Inherits from `linux-aarch64`
-    * Enables compile warnings as error
+To build with CUDA support on Windows, you need to install the CUDA toolkit from NVIDIA. The CUDA toolkit is available for download from [here](https://developer.nvidia.com/cuda-downloads).
 
-Presets can be either specified on the command line (`cmake --preset <PRESET>`) or via the associated select field in the CMake Windows GUI. Only presets appropriate for the current build host are available for selection.
+After installing the CUDA toolkit, you need to set variables to point CMake to the CUDA toolkit installation directory. For example, if you have installed the CUDA toolkit in `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4`, you need to set `CUDA_TOOLKIT_ROOT_DIR` to `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4` and `POLYGLOT_WITH_CUDA` to `ON` when running `.github/scripts/Build-Windows.ps1`.
 
-Additional build system options are available to developers:
+For example
+```powershell
+.github/scripts/Build-Windows.ps1 -Target x64 -ExtraCmakeArgs '-D','POLYGLOT_WITH_CUDA=ON','-D',"CUDA_TOOLKIT_ROOT_DIR='C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2'"
+```
 
-* `ENABLE_CCACHE`: Enables support for compilation speed-ups via ccache (enabled by default on macOS and Linux)
-* `ENABLE_FRONTEND_API`: Adds OBS Frontend API support for interactions with OBS Studio frontend functionality (disabled by default)
-* `ENABLE_QT`: Adds Qt6 support for custom user interface elements (disabled by default)
-* `CODESIGN_IDENTITY`: Name of the Apple Developer certificate that should be used for code signing
-* `CODESIGN_TEAM`: Apple Developer team ID that should be used for code signing
+You will need to copy a few CUDA .dll files to the location of the plugin .dll for it to run. The required .dll files from CUDA (which are located in the `bin` folder of the CUDA toolkit installation directory) are:
 
-## GitHub Actions & CI
+- `cudart64_NN.dll`
+- `cublas64_NN.dll`
+- `cublasLt64_NN.dll`
 
-Default GitHub Actions workflows are available for the following repository actions:
-
-* `push`: Run for commits or tags pushed to `master` or `main` branches.
-* `pr-pull`: Run when a Pull Request has been pushed or synchronized.
-* `dispatch`: Run when triggered by the workflow dispatch in GitHub's user interface.
-* `build-project`: Builds the actual project and is triggered by other workflows.
-* `check-format`: Checks CMake and plugin source code formatting and is triggered by other workflows.
-
-The workflows make use of GitHub repository actions (contained in `.github/actions`) and build scripts (contained in `.github/scripts`) which are not needed for local development, but might need to be adjusted if additional/different steps are required to build the plugin.
-
-### Retrieving build artifacts
-
-Successful builds on GitHub Actions will produce build artifacts that can be downloaded for testing. These artifacts are commonly simple archives and will not contain package installers or installation programs.
-
-### Building a Release
-
-To create a release, an appropriately named tag needs to be pushed to the `main`/`master` branch using semantic versioning (e.g., `12.3.4`, `23.4.5-beta2`). A draft release will be created on the associated repository with generated installer packages or installation programs attached as release artifacts.
-
-## Signing and Notarizing on macOS
-
-Plugins released for macOS should be codesigned and notarized with a valid Apple Developer ID for best user experience. To set this up, the private and personal key of a **paid Apple Developer ID** need to be downloaded from the Apple Developer portal:
-
-* On your Apple Developer dashboard, go to "Certificates, IDs & Profiles" and create two signing certificates:
-    * One of the "Developer ID Application" type. It will be used to sign the plugin's binaries
-    * One of the "Developer ID Installer" type. It will be used to sign the plugin's installer
-
-The developer certificate will usually carry a name similar in form to
-
-`Developer ID Application: <FIRSTNAME> <LASTNAME> (<LETTERS_AND_NUMBERS>)`
-
-This entire string should be specified as `CODESIGN_IDENTITY`, the `LETTERS_AND_NUMBERS` part as `CODESIGN_TEAM` to CMake to set up codesigning properly.
-
-### GitHub Actions Set Up
-
-To use code signing on GitHub Actions, the certificate and associated information need to be set up as _repository secrets_ in the GitHub repository's settings.
-
-* First, the locally stored developer certificate needs to be exported from the macOS keychain:
-    * Using the Keychain app on macOS, export these your certificates (Application and Installer) public _and_ private keys into a single .p12 file **protected with a strong password**
-    * Encode the .p12 file into its base64 representation by running `base64 <NAME_OF_YOUR_P12_FILE>`
-* Next, the certificate data and the password used to export it need to be set up as repository secrets:
-    * `MACOS_SIGNING_APPLICATION_IDENTITY`: Name of the "Developer ID Application" signing certificate
-    * `MACOS_SIGNING_INSTALLER_IDENTITY`: Name of "Developer ID Installer" signing certificate
-    * `MACOS_SIGNING_CERT`: The base64 encoded `.p12` file
-    * `MACOS_SIGNING_CERT_PASSWORD`: Password used to generate the .p12 certificate
-* To also enable notarization on GitHub Action runners, the following repository secrets are required:
-    * `MACOS_NOTARIZATION_USERNAME`: Your Apple Developer account's _Apple ID_
-    * `MACOS_NOTARIZATION_PASSWORD`: Your Apple Developer account's _generated app password_
+where `NN` is the CUDA major version number. For example, if you have installed CUDA 12.2 as in example above, then `NN` is `12`. -->

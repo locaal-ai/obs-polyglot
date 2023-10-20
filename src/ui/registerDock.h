@@ -1,10 +1,10 @@
-#pragma once
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int translate();
+void registerDock();
 
 #ifdef __cplusplus
 }
