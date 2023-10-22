@@ -5,6 +5,9 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <util/config-file.h>
+#include <ctranslate2/translator.h>
+#include <sentencepiece_processor.h>
+#include <httplib.h>
 
 polyglot_config_data global_config;
 polyglot_global_context global_context;
@@ -141,4 +144,31 @@ void resetContext()
 	global_context.translator = nullptr;
 	global_context.processor = nullptr;
 	global_context.svr = nullptr;
+	global_context.error_callback = [](const std::string &error_message) {
+		global_context.error_message = error_message;
+		obs_log(LOG_ERROR, "Error (callback): %s", error_message.c_str());
+	};
+	global_context.tokenizer = [](const std::string &) { return std::vector<std::string>(); };
+	global_context.detokenizer = [](const std::vector<std::string> &) { return std::string(); };
+}
+
+void freeContext()
+{
+	if (global_context.options != nullptr) {
+		delete global_context.options;
+		global_context.options = nullptr;
+	}
+	if (global_context.translator != nullptr) {
+		delete global_context.translator;
+		global_context.translator = nullptr;
+	}
+	if (global_context.processor != nullptr) {
+		delete global_context.processor;
+		global_context.processor = nullptr;
+	}
+	if (global_context.svr != nullptr) {
+		delete global_context.svr;
+		global_context.svr = nullptr;
+	}
+	resetContext();
 }

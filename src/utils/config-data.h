@@ -53,6 +53,8 @@ struct polyglot_global_context {
 	std::function<std::vector<std::string>(const std::string &)> tokenizer;
 	// detokenizer
 	std::function<std::string(const std::vector<std::string> &)> detokenizer;
+	// error callback
+	std::function<void(const std::string &)> error_callback;
 	// http server
 	httplib::Server *svr;
 };
@@ -70,6 +72,7 @@ extern "C" {
 #endif
 
 void resetContext();
+void freeContext();
 int saveConfig(bool create_if_not_exist);
 int loadConfig();
 

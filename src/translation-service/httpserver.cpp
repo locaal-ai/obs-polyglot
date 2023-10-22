@@ -25,6 +25,7 @@ void start_http_server()
 		global_context.svr->Post("/echo", [](const httplib::Request &req,
 						     httplib::Response &res,
 						     const httplib::ContentReader &content_reader) {
+			UNUSED_PARAMETER(req);
 			obs_log(LOG_DEBUG, "Received request on /echo");
 			std::string body;
 			content_reader([&](const char *data, size_t data_length) {
@@ -37,6 +38,7 @@ void start_http_server()
 		global_context.svr->Post(
 			"/translate", [](const httplib::Request &req, httplib::Response &res,
 					 const httplib::ContentReader &content_reader) {
+				UNUSED_PARAMETER(req);
 				obs_log(LOG_DEBUG, "Received request on /translate");
 				std::string body;
 				content_reader([&](const char *data, size_t data_length) {

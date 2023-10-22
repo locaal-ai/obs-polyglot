@@ -2,6 +2,7 @@
 #include "ui_settingsdialog.h"
 #include "utils/config-data.h"
 #include "plugin-support.h"
+#include "translation-service/translation.h"
 
 #include <QFileDialog>
 #include <obs-module.h>
@@ -63,6 +64,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Se
 		// serialize to json and save to the OBS module settings
 		if (saveConfig(false) == OBS_POLYGLOT_CONFIG_SUCCESS) {
 			obs_log(LOG_INFO, "Saved settings");
+
+			// update the plugin
+			freeContext();
+			if (build_translation_context() == OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS) {
+				obs_log(LOG_INFO, "Translation context updated");
+			} else {
+				obs_log(LOG_ERROR, "Failed to update translation context");
+			}
 		} else {
 			obs_log(LOG_ERROR, "Failed to save settings");
 		}

@@ -9,5 +9,5 @@ FetchContent_Declare(
   URL_HASH ${CppHTTPLib_HASH})
 FetchContent_MakeAvailable(cpphttplib)
 
-add_library(cpphttplib INTERFACE)
+add_library(cpphttplib INTERFACE EXCLUDE_FROM_ALL)
 target_include_directories(cpphttplib INTERFACE ${cpphttplib_SOURCE_DIR})
