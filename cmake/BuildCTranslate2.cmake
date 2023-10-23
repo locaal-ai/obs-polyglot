@@ -11,19 +11,19 @@ if(WIN32)
   set(OpenBLAS_URL "https://github.com/xianyi/OpenBLAS/releases/download/v0.3.24/OpenBLAS-0.3.24-x64.zip")
   set(OpenBLAS_SHA256 "6335128ee7117ea2dd2f5f96f76dafc17256c85992637189a2d5f6da0c608163")
   FetchContent_Declare(
-    openblas
+    openblas_fetch
     URL ${OpenBLAS_URL}
     URL_HASH SHA256=${OpenBLAS_SHA256})
-  FetchContent_MakeAvailable(openblas)
-  set(OpenBLAS_DIR ${openblas_SOURCE_DIR})
+  FetchContent_MakeAvailable(openblas_fetch)
+  set(OpenBLAS_DIR ${openblas_fetch_SOURCE_DIR})
   set(OPENBLAS_INCLUDE_DIR ${OpenBLAS_DIR}/include)
 
-  add_library(OpenBLAS STATIC IMPORTED)
-  set_target_properties(OpenBLAS PROPERTIES IMPORTED_LOCATION ${OpenBLAS_DIR}/lib/libopenblas.dll.a)
+  add_library(openblas STATIC IMPORTED)
+  set_target_properties(openblas PROPERTIES IMPORTED_LOCATION ${OpenBLAS_DIR}/lib/libopenblas.dll.a)
   install(FILES ${OpenBLAS_DIR}/bin/libopenblas.dll DESTINATION "obs-plugins/64bit")
 
   set(EXTRA_CT2_CMAKE_ARGS
-      -DOPENBLAS_INCLUDE_DIR=${OPENBLAS_INCLUDE_DIR} -DOPENBLAS_LIB=${OpenBLAS_DIR}/lib/libopenblas.dll.a
+      -DOPENBLAS_INCLUDE_DIR=${OPENBLAS_INCLUDE_DIR} -DOPENBLAS_LIBRARY=${OpenBLAS_DIR}/lib/libopenblas.dll.a
       -DWITH_OPENBLAS=ON -DOPENMP_RUNTIME=COMP)
 
   set(CT2_LIB_INSTALL_LOCATION bin/${CMAKE_SHARED_LIBRARY_PREFIX}ctranslate2${CMAKE_SHARED_LIBRARY_SUFFIX})
