@@ -6,8 +6,8 @@ set(SP_URL
     "https://github.com/google/sentencepiece.git"
     CACHE STRING "URL of sentencepiece repository")
 
-if(APPLE)
-  set(SP_CMAKE_PLATFORM_OPTIONS "-DSPM_ENABLE_SHARED=OFF") # -DCMAKE_OSX_ARCHITECTURES=x86_64$<SEMICOLON>arm64)
+if(UNIX)
+  set(SP_CMAKE_PLATFORM_OPTIONS "-DSPM_ENABLE_SHARED=OFF")
 else()
   set(SP_CMAKE_PLATFORM_OPTIONS "")
 endif()
