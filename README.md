@@ -17,6 +17,16 @@ It's using the excellent [CTranslate2](https://github.com/OpenNMT/CTranslate2) p
 
 If this free plugin has been valuable to you consider adding a ⭐ to this GH repo, subscribing to [my YouTube channel](https://www.youtube.com/@royshilk) where I post updates, and supporting my work: https://github.com/sponsors/royshil
 
+### Usage Tutorial
+Watch a short tutorial on how to use and setup Polyglot on your OBS scene.
+<div align="center">
+  <a href="https://youtu.be/ZMNILPWDkDw" target="_blank">
+    <img width="40%" src="https://github-production-user-asset-6210df.s3.amazonaws.com/441170/277700000-629554d9-0f71-42a4-a251-71dec1e0b864.PNG" />
+  </a>
+  <br/>
+  https://youtu.be/ZMNILPWDkDw
+</div>
+
 Current Features:
 - Translate in real time using an internal HTTP server
 - Choice of CTranslate2 model file
