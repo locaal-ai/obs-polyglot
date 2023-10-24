@@ -1,4 +1,4 @@
-#  - Speech AI assistant OBS Plugin
+# Ployglot - Translation AI assistant OBS Plugin
 
 <div align="center">
 
@@ -11,7 +11,7 @@
 
 ## Introduction
 
-Polyglot translation AI plugin allows you to translate, locally on your machine, text in multiple languages. ✅ No GPU required, ✅ no cloud costs, ✅ no network and ✅ no downtime! Privacy first - all data stays on your machine.
+Polyglot translation AI plugin allows you to translate text in multiple languages in real-time and locally on your machine. ✅ No GPU required, ✅ no cloud costs, ✅ no network and ✅ no downtime! Privacy first - all data stays on your machine.
 
 It's using the excellent [CTranslate2](https://github.com/OpenNMT/CTranslate2) project from OpenNMT.
 
@@ -23,6 +23,7 @@ Current Features:
 
 Roadmap:
 - Translation directly on OBS text sources, e.g. with a filter
+- Translation of live stream or recording captions
 
 Check out our other plugins:
 - [Background Removal](https://github.com/royshil/obs-backgroundremoval) removes background from webcam without a green screen.
@@ -35,7 +36,8 @@ Check out our other plugins:
 Check out the [latest releases](https://github.com/obs-ai/obs-polyglot/releases) for downloads and install instructions.
 
 ### Models
-You need to download a CT2 model for the translation service to work.
+_You need to download a CT2 model for the translation service to work._
+
 Here are download links for models that are compatible with the plugin:
 - https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 NLLB-200 multilingual model (recommended)
 - https://huggingface.co/models?sort=trending&search=ctranslate CTranslate2 models on HuggingFace
