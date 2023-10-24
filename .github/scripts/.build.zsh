@@ -231,7 +231,7 @@ ${_usage_host:-}"
         )
 
         # TODO: enable -arch arm64
-        cmake_build_args+=(--preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=NO -arch x86_64)
+        cmake_build_args+=(--preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=NO -arch x86_64 -arch arm64)
         cmake_install_args+=(build_macos --config ${config} --prefix "${project_root}/release/${config}")
 
         local -a xcbeautify_opts=()

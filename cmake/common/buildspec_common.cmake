@@ -69,7 +69,7 @@ function(_setup_obs_studio)
   elseif(OS_MACOS)
     set(_cmake_generator "Xcode")
     # TODO: enable arm64; currently fails
-    set(_cmake_arch "-DCMAKE_OSX_ARCHITECTURES:STRING='x86_64'")
+    set(_cmake_arch "-DCMAKE_OSX_ARCHITECTURES:STRING='x86_64;arm64'")
     set(_cmake_extra "-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     set(_cmake_version "3.0.0")
   endif()
