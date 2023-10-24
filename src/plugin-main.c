@@ -27,26 +27,27 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
 bool obs_module_load(void)
 {
-	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
-		PLUGIN_VERSION);
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 
-    // load plugin settings from config
+	resetContext();
+
+	// load plugin settings from config
 	if (loadConfig() == OBS_POLYGLOT_CONFIG_SUCCESS) {
 		obs_log(LOG_INFO, "Loaded config from config file");
 	} else {
 		obs_log(LOG_INFO, "Failed to load config from config file");
 	}
-    resetContext();
-    // build the translation context
-    if (build_translation_context() != OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS) {
-        obs_log(LOG_ERROR, "Failed to build translation context");
-    }
+	// build the translation context
+	if (build_translation_context() != OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS) {
+		obs_log(LOG_ERROR, "Failed to build translation context");
+	}
 
-    registerDock();
+	registerDock();
 	return true;
 }
 
 void obs_module_unload(void)
 {
+	freeContext();
 	obs_log(LOG_INFO, "plugin unloaded");
 }

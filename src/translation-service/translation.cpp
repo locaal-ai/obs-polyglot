@@ -3,9 +3,8 @@
 #include "utils/config-data.h"
 
 #include <ctranslate2/translator.h>
-#include <obs-module.h>
-#include <ctranslate2/models/sequence_to_sequence.h>
 #include <sentencepiece_processor.h>
+#include <obs-module.h>
 #include <regex>
 
 int build_translation_context()
@@ -17,6 +16,7 @@ int build_translation_context()
 		const auto status = global_context.processor->Load(global_config.local_spm_path);
 		if (!status.ok()) {
 			obs_log(LOG_ERROR, status.ToString().c_str());
+			global_context.error_callback("Failed to load SPM. " + status.ToString());
 			return OBS_POLYGLOT_TRANSLATION_INIT_FAIL;
 		}
 
@@ -45,8 +45,10 @@ int build_translation_context()
 		global_context.options->return_scores = false;
 	} catch (std::exception &e) {
 		obs_log(LOG_ERROR, "Error: %s", e.what());
+		global_context.error_callback("Failed to load CT2 model. " + std::string(e.what()));
 		return OBS_POLYGLOT_TRANSLATION_INIT_FAIL;
 	}
+	global_context.error_callback(""); // Clear any errors
 	return OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS;
 }
 

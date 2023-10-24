@@ -22,7 +22,7 @@ Current Features:
 - Choice of CTranslate2 model file
 
 Roadmap:
-- Translation directly on OBS text sources
+- Translation directly on OBS text sources, e.g. with a filter
 
 Check out our other plugins:
 - [Background Removal](https://github.com/royshil/obs-backgroundremoval) removes background from webcam without a green screen.
@@ -33,6 +33,12 @@ Check out our other plugins:
 
 ## Download
 Check out the [latest releases](https://github.com/obs-ai/obs-polyglot/releases) for downloads and install instructions.
+
+### Models
+You need to download a CT2 model for the translation service to work.
+Here are download links for models that are compatible with the plugin:
+- https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 NLLB-200 multilingual model (recommended)
+- https://huggingface.co/models?sort=trending&search=ctranslate CTranslate2 models on HuggingFace
 
 ## Building
 

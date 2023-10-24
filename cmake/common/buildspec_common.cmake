@@ -68,10 +68,18 @@ function(_setup_obs_studio)
     set(_cmake_version "2.0.0")
   elseif(OS_MACOS)
     set(_cmake_generator "Xcode")
-    set(_cmake_arch "-DCMAKE_OSX_ARCHITECTURES:STRING='arm64;x86_64'")
+    # TODO: enable arm64; currently fails
+    set(_cmake_arch "-DCMAKE_OSX_ARCHITECTURES:STRING='x86_64;arm64'")
     set(_cmake_extra "-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}")
     set(_cmake_version "3.0.0")
   endif()
+
+  message(STATUS "Patch libobs")
+  execute_process(
+    COMMAND patch --forward "libobs/CMakeLists.txt" "${CMAKE_CURRENT_SOURCE_DIR}/patch_libobs.diff"
+    RESULT_VARIABLE _process_result
+    WORKING_DIRECTORY "${dependencies_dir}/${_obs_destination}")
+  message(STATUS "Patch - done")
 
   message(STATUS "Configure ${label} (${arch})")
   execute_process(
