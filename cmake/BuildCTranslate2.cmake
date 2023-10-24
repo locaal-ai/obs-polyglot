@@ -3,20 +3,17 @@
 include(ExternalProject)
 include(FetchContent)
 
-if (APPLE)
+if(APPLE)
 
   FetchContent_Declare(
     ctranslate2_fetch
     URL https://github.com/obs-ai/obs-ai-ctranslate2-dep/releases/download/1.0.0/libctranslate2-macos-Release-1.0.0.tar.gz
-    URL_HASH SHA256=8e55a6ed4fb17ac556ad0e020ddab619584e3ceb4c9497a816f819bd8fd36443
-  )
+    URL_HASH SHA256=8e55a6ed4fb17ac556ad0e020ddab619584e3ceb4c9497a816f819bd8fd36443)
   FetchContent_MakeAvailable(ctranslate2_fetch)
 
   add_library(ct2 INTERFACE)
-  target_link_libraries(ct2 INTERFACE "-framework Accelerate"
-    ${ctranslate2_fetch_SOURCE_DIR}/lib/libctranslate2.a
-    ${ctranslate2_fetch_SOURCE_DIR}/lib/libcpu_features.a
-  )
+  target_link_libraries(ct2 INTERFACE "-framework Accelerate" ${ctranslate2_fetch_SOURCE_DIR}/lib/libctranslate2.a
+                                      ${ctranslate2_fetch_SOURCE_DIR}/lib/libcpu_features.a)
   set_target_properties(ct2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${ctranslate2_fetch_SOURCE_DIR}/include)
   target_compile_options(ct2 INTERFACE -Wno-shorten-64-to-32)
 
@@ -50,7 +47,7 @@ else()
   if(UNIX)
     if(APPLE)
       set(CT2_CMAKE_PLATFORM_OPTIONS -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DBUILD_SHARED_LIBS=OFF -DWITH_ACCELERATE=ON
-                                    -DOPENMP_RUNTIME=NONE -DCMAKE_OSX_ARCHITECTURES=arm64)
+                                     -DOPENMP_RUNTIME=NONE -DCMAKE_OSX_ARCHITECTURES=arm64)
     else()
       set(CT2_CMAKE_PLATFORM_OPTIONS -DBUILD_SHARED_LIBS=OFF -DOPENMP_RUNTIME=NONE -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
     endif()
@@ -70,32 +67,28 @@ else()
     INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --config ${CMAKE_BUILD_TYPE}
     BUILD_BYPRODUCTS <INSTALL_DIR>/${CT2_LIB_INSTALL_LOCATION}
     CMAKE_ARGS -DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
-              -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-              -DWITH_CUDA=OFF
-              -DWITH_MKL=OFF
-              -DWITH_TESTS=OFF
-              -DWITH_EXAMPLES=OFF
-              -DWITH_TFLITE=OFF
-              -DWITH_TRT=OFF
-              -DWITH_PYTHON=OFF
-              -DWITH_SERVER=OFF
-              -DWITH_COVERAGE=OFF
-              -DWITH_PROFILING=OFF
-              -DBUILD_CLI=OFF
-              ${CT2_OPENBLAS_CMAKE_ARGS}
-              ${CT2_CMAKE_PLATFORM_OPTIONS})
+               -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+               -DWITH_CUDA=OFF
+               -DWITH_MKL=OFF
+               -DWITH_TESTS=OFF
+               -DWITH_EXAMPLES=OFF
+               -DWITH_TFLITE=OFF
+               -DWITH_TRT=OFF
+               -DWITH_PYTHON=OFF
+               -DWITH_SERVER=OFF
+               -DWITH_COVERAGE=OFF
+               -DWITH_PROFILING=OFF
+               -DBUILD_CLI=OFF
+               ${CT2_OPENBLAS_CMAKE_ARGS}
+               ${CT2_CMAKE_PLATFORM_OPTIONS})
   ExternalProject_Get_Property(ct2_build INSTALL_DIR)
 
   if(UNIX)
-  #  Get cpu_features from the CTranslate2 build - only for x86_64 builds
-  #   if(APPLE)
-  #     ExternalProject_Get_Property(ct2_build BINARY_DIR)
-  #     add_library(ct2::cpu_features STATIC IMPORTED GLOBAL)
-  #     set_target_properties(
-  #       ct2::cpu_features PROPERTIES IMPORTED_LOCATION
-  #                                    ${BINARY_DIR}/third_party/cpu_features/RelWithDebInfo/libcpu_features.a)
-  #   endif()
+    # Get cpu_features from the CTranslate2 build - only for x86_64 builds if(APPLE)
+    # ExternalProject_Get_Property(ct2_build BINARY_DIR) add_library(ct2::cpu_features STATIC IMPORTED GLOBAL)
+    # set_target_properties( ct2::cpu_features PROPERTIES IMPORTED_LOCATION
+    # ${BINARY_DIR}/third_party/cpu_features/RelWithDebInfo/libcpu_features.a) endif()
 
     add_library(ct2::ct2 STATIC IMPORTED GLOBAL)
   else()
@@ -110,7 +103,11 @@ else()
 
   add_library(ct2 INTERFACE)
   if(APPLE)
-    target_link_libraries(ct2 INTERFACE "-framework Accelerate /Users/roy_shilkrot/Downloads/obs-ai-ctranslate2-dep/CTranslate2-3.20.0/release/universal/RelWithDebInfo/lib/libctranslate2.a")
+    target_link_libraries(
+      ct2
+      INTERFACE
+        "-framework Accelerate /Users/roy_shilkrot/Downloads/obs-ai-ctranslate2-dep/CTranslate2-3.20.0/release/universal/RelWithDebInfo/lib/libctranslate2.a"
+    )
   else()
     target_link_libraries(ct2 INTERFACE ct2::ct2)
   endif()
