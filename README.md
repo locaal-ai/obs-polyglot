@@ -13,7 +13,9 @@
 
 Polyglot translation AI plugin allows you to translate text in multiple languages in real-time and locally on your machine. ✅ No GPU required, ✅ no cloud costs, ✅ no network and ✅ no downtime! Privacy first - all data stays on your machine.
 
-It's using the excellent [CTranslate2](https://github.com/OpenNMT/CTranslate2) project from OpenNMT.
+"polyglot" is derived from the Greek words: "poly-" meaning "many"and "glōtta" (or "glōssa") meaning "tongue" or "language".
+
+It's using the excellent [CTranslate2](https://github.com/OpenNMT/CTranslate2) project from [OpenNMT](https://opennmt.net/).
 
 If this free plugin has been valuable to you consider adding a ⭐ to this GH repo, subscribing to [my YouTube channel](https://www.youtube.com/@royshilk) where I post updates, and supporting my work: https://github.com/sponsors/royshil
 
