@@ -37,9 +37,14 @@ else()
                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${SP_CMAKE_OPTIONS})
   ExternalProject_Get_Property(sentencepiece_build INSTALL_DIR)
 
-  add_library(sentencepiece STATIC IMPORTED GLOBAL)
-  add_dependencies(sentencepiece sentencepiece_build)
-  set_target_properties(sentencepiece PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/${SENTENCEPIECE_INSTALL_LIB_LOCATION})
-  set_target_properties(sentencepiece PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${INSTALL_DIR}/include)
+  add_library(libsentencepiece STATIC IMPORTED GLOBAL)
+  add_dependencies(libsentencepiece sentencepiece_build)
+  set_target_properties(libsentencepiece PROPERTIES IMPORTED_LOCATION
+                                                    ${INSTALL_DIR}/${SENTENCEPIECE_INSTALL_LIB_LOCATION})
+
+  add_library(sentencepiece INTERFACE)
+  add_dependencies(sentencepiece libsentencepiece)
+  target_link_libraries(sentencepiece INTERFACE libsentencepiece)
+  target_include_directories(sentencepiece INTERFACE ${INSTALL_DIR}/include)
 
 endif()
