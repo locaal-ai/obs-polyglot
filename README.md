@@ -51,7 +51,7 @@ Check out the [latest releases](https://github.com/obs-ai/obs-polyglot/releases)
 _You need to download a CT2 model for the translation service to work._
 
 Here are download links for models that are compatible with the plugin:
-- https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 NLLB-200 multilingual model (recommended)
+- https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 NLLB-200 multilingual model (recommended) ([List of NLLB language codes](https://github.com/facebookresearch/LASER/blob/main/nllb/README.md))
 - https://huggingface.co/models?sort=trending&search=ctranslate CTranslate2 models on HuggingFace
 
 ## Building
