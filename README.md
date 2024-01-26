@@ -6,6 +6,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/obs-ai/obs-polyglot/push.yaml)](https://github.com/obs-ai/obs-polyglot/actions/workflows/push.yaml)
 [![Total downloads](https://img.shields.io/github/downloads/obs-ai/obs-polyglot/total)](https://github.com/obs-ai/obs-polyglot/releases)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/obs-ai/obs-polyglot)](https://github.com/obs-ai/obs-polyglot/releases)
+[![Discord](https://img.shields.io/discord/1200229425141252116)](https://discord.gg/KbjGU2vvUz)
 
 </div>
 
