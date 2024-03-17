@@ -55,6 +55,12 @@ Here are download links for models that are compatible with the plugin:
 - https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 NLLB-200 multilingual model (recommended) ([List of NLLB language codes](https://github.com/facebookresearch/LASER/blob/main/nllb/README.md))
 - https://huggingface.co/models?sort=trending&search=ctranslate CTranslate2 models on HuggingFace
 
+Download models options: (get e.g. `model.bin` and SPM = SentencePiece Model `.model` file)
+- https://forum.opennmt.net/t/nllb-200-with-ctranslate2/5090 (NLLB)
+- https://huggingface.co/JustFrederik/m2m_100_418m_ct2_int8/tree/main (M2M100)
+- https://huggingface.co/Rohith04/ct2fast_m2m100_418M/tree/main (M2M100)
+- https://huggingface.co/jncraton/m2m100_418M-ct2-int8/tree/main (M2M100)
+
 ## Building
 
 The plugin was built and tested on Mac OSX  (Intel & Apple silicon), Windows and Linux.
