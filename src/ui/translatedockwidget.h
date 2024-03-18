@@ -14,6 +14,7 @@ public:
 	explicit TranslateDockWidget(QWidget *parent = nullptr);
 	~TranslateDockWidget();
 	void updateErrorLabel(const std::string &error_message);
+	void updateStatusLabel(const std::string &message);
 
 private slots:
 	void openSettingsDialog();

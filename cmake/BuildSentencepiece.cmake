@@ -6,8 +6,19 @@ if(APPLE)
 
   FetchContent_Declare(
     sentencepiece_fetch
-    URL https://github.com/obs-ai/obs-ai-ctranslate2-dep/releases/download/1.0.0/libsentencepiece-macos-Release-1.0.0.tar.gz
-    URL_HASH SHA256=67f58a8e97c14db1bc69becd507ffe69326948f371bf874fe919157d7d65aff4)
+    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.0/libsentencepiece-macos-Release-1.1.0.tar.gz
+    URL_HASH SHA256=168c9eead7ea77010c6e7867555da1b39433e5c002dc994f44abe96df7c71a66)
+  FetchContent_MakeAvailable(sentencepiece_fetch)
+  add_library(sentencepiece INTERFACE)
+  target_link_libraries(sentencepiece INTERFACE ${sentencepiece_fetch_SOURCE_DIR}/lib/libsentencepiece.a)
+  set_target_properties(sentencepiece PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+                                                 ${sentencepiece_fetch_SOURCE_DIR}/include)
+elseif(WIN32)
+
+  FetchContent_Declare(
+    sentencepiece_fetch
+    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.0/sentencepiece-windows-0.2.0-Release.zip
+    URL_HASH SHA256=f45109b75929d1e35780d1b4ce4218002a3872352f494659b79488214daa987c)
   FetchContent_MakeAvailable(sentencepiece_fetch)
   add_library(sentencepiece INTERFACE)
   target_link_libraries(sentencepiece INTERFACE ${sentencepiece_fetch_SOURCE_DIR}/lib/libsentencepiece.a)

@@ -10,6 +10,7 @@ TranslateDockWidget::TranslateDockWidget(QWidget *parent)
 	ui->setupUi(this);
 
 	ui->errorLabel->hide();
+	ui->label_status->hide();
 	this->updateErrorLabel(global_context.error_message);
 
 	// connect the settings button to the settings dialog
@@ -37,6 +38,15 @@ void TranslateDockWidget::openSettingsDialog()
 	SettingsDialog *settingsDialog = new SettingsDialog(this);
 	// show the settings dialog
 	settingsDialog->show();
+}
+
+void TranslateDockWidget::updateStatusLabel(const std::string &message)
+{
+	if (message.empty()) {
+		ui->label_status->hide();
+		return;
+	}
+	ui->label_status->setText(QString::fromStdString(message));
 }
 
 void TranslateDockWidget::updateErrorLabel(const std::string &error_message)

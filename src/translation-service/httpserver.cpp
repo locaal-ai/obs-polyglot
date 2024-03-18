@@ -81,6 +81,10 @@ void start_http_server()
 		}
 		obs_log(LOG_INFO, "Polyglot Http server stopped.");
 	}).detach();
+
+	global_context.status_callback("Ready for requests at http://localhost:" +
+				       std::to_string(global_config.http_server_port) +
+				       "/translate");
 }
 
 // stop the http server
@@ -93,5 +97,6 @@ void stop_http_server()
 		global_context.svr->stop();
 		delete global_context.svr;
 		global_context.svr = nullptr;
+		global_context.status_callback("");
 	}
 }

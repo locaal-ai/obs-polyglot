@@ -8,6 +8,8 @@
 #include <functional>
 
 struct polyglot_config_data {
+	// model selection (0: none, 1: custom, 2+ preset models)
+	int model_selection;
 	// local model path
 	std::string local_model_path;
 	// local spm path
@@ -43,6 +45,8 @@ class Server;
 struct polyglot_global_context {
 	// error message
 	std::string error_message;
+	// status message
+	std::string status_message;
 	// ctranslate2 options
 	ctranslate2::TranslationOptions *options;
 	// ctranslate2 translator
@@ -55,6 +59,8 @@ struct polyglot_global_context {
 	std::function<std::string(const std::vector<std::string> &)> detokenizer;
 	// error callback
 	std::function<void(const std::string &)> error_callback;
+	// status callback
+	std::function<void(const std::string &)> status_callback;
 	// http server
 	httplib::Server *svr;
 };

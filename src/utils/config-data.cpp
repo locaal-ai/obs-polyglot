@@ -14,6 +14,7 @@ polyglot_global_context global_context;
 
 void config_defaults()
 {
+	global_config.model_selection = 0;
 	global_config.local = true;
 	global_config.local_model_path = "";
 	global_config.local_spm_path = "";
@@ -108,6 +109,7 @@ int loadConfig()
 std::string config_data_to_json(const polyglot_config_data &data)
 {
 	nlohmann::json j;
+	j["model_selection"] = data.model_selection;
 	j["local"] = data.local;
 	j["local_model_path"] = data.local_model_path;
 	j["local_spm_path"] = data.local_spm_path;
@@ -124,6 +126,7 @@ polyglot_config_data config_data_from_json(const std::string &json)
 	nlohmann::json j = nlohmann::json::parse(json);
 	polyglot_config_data data;
 	try {
+		data.model_selection = j["model_selection"];
 		data.local = j["local"];
 		data.local_model_path = j["local_model_path"];
 		data.local_spm_path = j["local_spm_path"];
@@ -146,7 +149,15 @@ void resetContext()
 	global_context.svr = nullptr;
 	global_context.error_callback = [](const std::string &error_message) {
 		global_context.error_message = error_message;
-		obs_log(LOG_ERROR, "Error (callback): %s", error_message.c_str());
+		if (!error_message.empty()) {
+			obs_log(LOG_ERROR, "Error (callback): %s", error_message.c_str());
+		}
+	};
+	global_context.status_callback = [](const std::string &message) {
+		global_context.status_message = message;
+		if (!message.empty()) {
+			obs_log(LOG_INFO, "Status (callback): %s", message.c_str());
+		}
 	};
 	global_context.tokenizer = [](const std::string &) { return std::vector<std::string>(); };
 	global_context.detokenizer = [](const std::vector<std::string> &) { return std::string(); };

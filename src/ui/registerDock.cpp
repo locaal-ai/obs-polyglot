@@ -23,6 +23,10 @@ void registerDock()
 		global_context.error_message = error_message;
 		dock->updateErrorLabel(error_message);
 	};
+	global_context.status_callback = [=](const std::string &message) {
+		global_context.status_message = message;
+		dock->updateStatusLabel(message);
+	};
 	// Register the dock
 	obs_frontend_add_dock(dock);
 

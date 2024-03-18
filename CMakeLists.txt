@@ -19,7 +19,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE OBS::libobs)
 include(cmake/BuildCTranslate2.cmake)
 include(cmake/BuildSentencepiece.cmake)
 include(cmake/BuildCppHTTPLib.cmake)
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ct2 sentencepiece cpphttplib)
+include(cmake/BuildMyCurl.cmake)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ct2 sentencepiece cpphttplib libcurl)
 
 if(ENABLE_FRONTEND_API)
   find_package(obs-frontend-api REQUIRED)
@@ -40,7 +41,10 @@ if(ENABLE_QT)
 endif()
 
 add_subdirectory(src/ui)
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/translation-service/translation.cpp src/plugin-main.c
-                                             src/utils/config-data.cpp src/translation-service/httpserver.cpp)
+target_sources(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE src/translation-service/translation.cpp src/plugin-main.c src/utils/config-data.cpp
+          src/translation-service/httpserver.cpp src/model-utils/model-downloader.cpp
+          src/model-utils/model-downloader-ui.cpp)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
