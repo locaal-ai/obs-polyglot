@@ -29,7 +29,7 @@ bool obs_module_load(void)
 {
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 
-	resetContext();
+	resetContext(true);
 	registerDock();
 
 	// load plugin settings from config
@@ -50,6 +50,6 @@ bool obs_module_load(void)
 
 void obs_module_unload(void)
 {
-	freeContext();
+	freeContext(true);
 	obs_log(LOG_INFO, "plugin unloaded");
 }

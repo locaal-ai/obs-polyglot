@@ -62,5 +62,7 @@ void TranslateDockWidget::updateErrorLabel(const std::string &error_message)
 		ui->startStopHTTPServer->setEnabled(false);
 	} else {
 		ui->errorLabel->hide();
+		// enable the start/stop http server button
+		ui->startStopHTTPServer->setEnabled(true);
 	}
 }

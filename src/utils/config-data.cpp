@@ -140,30 +140,33 @@ polyglot_config_data config_data_from_json(const std::string &json)
 	return data;
 }
 
-void resetContext()
+void resetContext(bool resetCallbacks)
 {
 	global_context.error_message = "";
 	global_context.options = nullptr;
 	global_context.translator = nullptr;
 	global_context.processor = nullptr;
 	global_context.svr = nullptr;
-	global_context.error_callback = [](const std::string &error_message) {
-		global_context.error_message = error_message;
-		if (!error_message.empty()) {
-			obs_log(LOG_ERROR, "Error (callback): %s", error_message.c_str());
-		}
-	};
-	global_context.status_callback = [](const std::string &message) {
-		global_context.status_message = message;
-		if (!message.empty()) {
-			obs_log(LOG_INFO, "Status (callback): %s", message.c_str());
-		}
-	};
+	if (resetCallbacks) {
+		global_context.error_callback = [](const std::string &error_message) {
+			global_context.error_message = error_message;
+			if (!error_message.empty()) {
+				obs_log(LOG_ERROR, "Error (vanilla callback): %s",
+					error_message.c_str());
+			}
+		};
+		global_context.status_callback = [](const std::string &message) {
+			global_context.status_message = message;
+			if (!message.empty()) {
+				obs_log(LOG_INFO, "Status (vanilla callback): %s", message.c_str());
+			}
+		};
+	}
 	global_context.tokenizer = [](const std::string &) { return std::vector<std::string>(); };
 	global_context.detokenizer = [](const std::vector<std::string> &) { return std::string(); };
 }
 
-void freeContext()
+void freeContext(bool resetCallbacks)
 {
 	if (global_context.options != nullptr) {
 		delete global_context.options;
@@ -181,5 +184,5 @@ void freeContext()
 		delete global_context.svr;
 		global_context.svr = nullptr;
 	}
-	resetContext();
+	resetContext(resetCallbacks);
 }

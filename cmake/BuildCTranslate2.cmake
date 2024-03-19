@@ -7,8 +7,8 @@ if(APPLE)
 
   FetchContent_Declare(
     ctranslate2_fetch
-    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.0/libctranslate2-macos-Release-1.1.0.tar.gz
-    URL_HASH SHA256=dba2eaa1b3f4e9eb1e8999e668d515aa94b115af07565e2b6797b9eda6f2f845)
+    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.1/libctranslate2-macos-Release-1.1.1.tar.gz
+    URL_HASH SHA256=da04d88ecc1ea105f8ee672e4eab33af96e50c999c5cc8170e105e110392182b)
   FetchContent_MakeAvailable(ctranslate2_fetch)
 
   add_library(ct2 INTERFACE)
@@ -21,15 +21,17 @@ elseif(WIN32)
 
   FetchContent_Declare(
     ctranslate2_fetch
-    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.0/libctranslate2-windows-4.1.1-Release.zip
-    URL_HASH SHA256=683023e9c76ac6d54e54d14c32d86c020d5486ba289b60e5336f7cc86b984d03)
+    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.1/libctranslate2-windows-4.1.1-Release.zip
+    URL_HASH SHA256=aa87073e663e4dfbbc9b9360d83bed847212309bea433c3b1888a33a51cb0db0)
   FetchContent_MakeAvailable(ctranslate2_fetch)
 
   add_library(ct2 INTERFACE)
-  target_link_libraries(ct2 INTERFACE "-framework Accelerate" ${ctranslate2_fetch_SOURCE_DIR}/lib/libctranslate2.a
-                                      ${ctranslate2_fetch_SOURCE_DIR}/lib/libcpu_features.a)
+  target_link_libraries(ct2 INTERFACE ${ctranslate2_fetch_SOURCE_DIR}/lib/ctranslate2.lib)
   set_target_properties(ct2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${ctranslate2_fetch_SOURCE_DIR}/include)
-  target_compile_options(ct2 INTERFACE -Wno-shorten-64-to-32)
+  target_compile_options(ct2 INTERFACE /wd4267 /wd4244 /wd4305 /wd4996 /wd4099)
+
+  install(FILES ${ctranslate2_fetch_SOURCE_DIR}/bin/ctranslate2.dll ${ctranslate2_fetch_SOURCE_DIR}/bin/libopenblas.dll
+          DESTINATION "obs-plugins/64bit")
 
 else()
   set(CT2_VERSION "4.1.1")
@@ -64,11 +66,6 @@ else()
                ${CT2_OPENBLAS_CMAKE_ARGS}
                ${CT2_CMAKE_PLATFORM_OPTIONS})
   ExternalProject_Get_Property(ct2_build INSTALL_DIR)
-
-  # Get cpu_features from the CTranslate2 build - only for x86_64 builds if(APPLE)
-  # ExternalProject_Get_Property(ct2_build BINARY_DIR) add_library(ct2::cpu_features STATIC IMPORTED GLOBAL)
-  # set_target_properties( ct2::cpu_features PROPERTIES IMPORTED_LOCATION
-  # ${BINARY_DIR}/third_party/cpu_features/RelWithDebInfo/libcpu_features.a) endif()
 
   add_library(ct2::ct2 STATIC IMPORTED GLOBAL)
   add_dependencies(ct2::ct2 ct2_build)

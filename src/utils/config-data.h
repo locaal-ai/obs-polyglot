@@ -77,8 +77,8 @@ extern polyglot_global_context global_context;
 extern "C" {
 #endif
 
-void resetContext();
-void freeContext();
+void resetContext(bool resetCallbacks);
+void freeContext(bool resetCallbacks);
 int saveConfig(bool create_if_not_exist);
 int loadConfig();
 

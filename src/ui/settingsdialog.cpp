@@ -134,7 +134,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Se
 			obs_log(LOG_INFO, "Saved settings");
 
 			// update the plugin
-			freeContext();
+			freeContext(false);
 			if (build_translation_context() == OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS) {
 				obs_log(LOG_INFO, "Translation context updated");
 			} else {

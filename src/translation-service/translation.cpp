@@ -58,6 +58,26 @@ int build_translation_context()
 	return OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS;
 }
 
+int translate_from_json(const std::string &body, std::string &result)
+{
+	std::string input_text;
+	std::string source_lang;
+	std::string target_lang;
+	// parse body json
+	try {
+		nlohmann::json j = nlohmann::json::parse(body);
+		input_text = j["text"];
+		source_lang = j["source_lang"];
+		target_lang = j["target_lang"];
+	} catch (std::exception &e) {
+		obs_log(LOG_ERROR, "Error: %s", e.what());
+		result = "Error parsing json";
+		return OBS_POLYGLOT_TRANSLATION_FAIL;
+	}
+
+	return translate(input_text, source_lang, target_lang, result);
+}
+
 int translate(const std::string &text, const std::string &source_lang,
 	      const std::string &target_lang, std::string &result)
 {

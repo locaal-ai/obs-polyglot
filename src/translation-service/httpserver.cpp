@@ -45,24 +45,9 @@ void start_http_server()
 					body.append(data, data_length);
 					return true;
 				});
-				std::string input_text;
-				std::string source_lang;
-				std::string target_lang;
-				// parse body json
-				try {
-					nlohmann::json j = nlohmann::json::parse(body);
-					input_text = j["text"];
-					source_lang = j["source_lang"];
-					target_lang = j["target_lang"];
-				} catch (std::exception &e) {
-					obs_log(LOG_ERROR, "Error: %s", e.what());
-					res.set_content("Error parsing json", "text/plain");
-					res.status = 500;
-					return;
-				}
 
 				std::string result;
-				int ret = translate(input_text, source_lang, target_lang, result);
+				int ret = translate_from_json(body, result);
 				if (ret == OBS_POLYGLOT_TRANSLATION_SUCCESS) {
 					res.set_content(result, "text/plain");
 				} else {
