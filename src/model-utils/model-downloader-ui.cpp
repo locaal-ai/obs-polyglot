@@ -13,12 +13,12 @@ size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream)
 	return written;
 }
 
-ModelDownloader::ModelDownloader(const ModelInfo &model_info,
+ModelDownloader::ModelDownloader(const ModelInfo &model_info_,
 				 download_finished_callback_t download_finished_callback_,
 				 QWidget *parent)
 	: QDialog(parent),
 	  download_finished_callback(download_finished_callback_),
-	  model_info(model_info)
+	  model_info(model_info_)
 {
 	this->setWindowTitle("Downloading model...");
 	this->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
