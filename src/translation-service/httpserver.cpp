@@ -45,24 +45,9 @@ void start_http_server()
 					body.append(data, data_length);
 					return true;
 				});
-				std::string input_text;
-				std::string source_lang;
-				std::string target_lang;
-				// parse body json
-				try {
-					nlohmann::json j = nlohmann::json::parse(body);
-					input_text = j["text"];
-					source_lang = j["source_lang"];
-					target_lang = j["target_lang"];
-				} catch (std::exception &e) {
-					obs_log(LOG_ERROR, "Error: %s", e.what());
-					res.set_content("Error parsing json", "text/plain");
-					res.status = 500;
-					return;
-				}
 
 				std::string result;
-				int ret = translate(input_text, source_lang, target_lang, result);
+				int ret = translate_from_json(body, result);
 				if (ret == OBS_POLYGLOT_TRANSLATION_SUCCESS) {
 					res.set_content(result, "text/plain");
 				} else {
@@ -81,6 +66,10 @@ void start_http_server()
 		}
 		obs_log(LOG_INFO, "Polyglot Http server stopped.");
 	}).detach();
+
+	global_context.status_callback("Ready for requests at http://localhost:" +
+				       std::to_string(global_config.http_server_port) +
+				       "/translate");
 }
 
 // stop the http server
@@ -93,5 +82,6 @@ void stop_http_server()
 		global_context.svr->stop();
 		delete global_context.svr;
 		global_context.svr = nullptr;
+		global_context.status_callback("");
 	}
 }

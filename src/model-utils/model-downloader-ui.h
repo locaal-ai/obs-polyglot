@@ -1,0 +1,63 @@
+#ifndef MODEL_DOWNLOADER_UI_H
+#define MODEL_DOWNLOADER_UI_H
+
+#include <QtWidgets>
+#include <QThread>
+
+#include <string>
+#include <functional>
+
+#include <curl/curl.h>
+
+#include "model-downloader-types.h"
+
+class ModelDownloadWorker : public QObject {
+	Q_OBJECT
+public:
+	ModelDownloadWorker(const ModelInfo &model_info);
+	~ModelDownloadWorker();
+
+public slots:
+	void download_model();
+
+signals:
+	void download_progress(int progress);
+	void download_finished(const ModelInfo &info);
+	void download_error(const std::string &reason);
+
+private:
+	static int progress_callback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
+				     curl_off_t ultotal, curl_off_t ulnow);
+	std::string download_file(CURL *curl, const std::string &url, const std::string &path);
+	ModelInfo model_info;
+};
+
+class ModelDownloader : public QDialog {
+	Q_OBJECT
+public:
+	ModelDownloader(const ModelInfo &model_info,
+			download_finished_callback_t download_finished_callback,
+			QWidget *parent = nullptr);
+	~ModelDownloader();
+
+public slots:
+	void update_progress(int progress);
+	void download_finished(const ModelInfo &info);
+	void show_error(const std::string &reason);
+
+protected:
+	void closeEvent(QCloseEvent *e) override;
+
+private:
+	QVBoxLayout *layout;
+	QProgressBar *progress_bar;
+	QThread *download_thread;
+	ModelDownloadWorker *download_worker;
+	// Callback for when the download is finished
+	download_finished_callback_t download_finished_callback;
+	bool mPrepareToClose;
+	void close();
+	ModelInfo model_info;
+};
+
+#endif // MODEL_DOWNLOADER_UI_H

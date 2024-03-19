@@ -10,12 +10,17 @@
 int build_translation_context()
 {
 	obs_log(LOG_INFO, "Building translation context...");
+	if (global_config.model_selection == 0) {
+		obs_log(LOG_INFO, "No model selected");
+		global_context.error_callback("No model selected");
+		return OBS_POLYGLOT_TRANSLATION_INIT_FAIL;
+	}
 	try {
 		obs_log(LOG_INFO, "Loading SPM from %s", global_config.local_spm_path.c_str());
 		global_context.processor = new sentencepiece::SentencePieceProcessor();
 		const auto status = global_context.processor->Load(global_config.local_spm_path);
 		if (!status.ok()) {
-			obs_log(LOG_ERROR, status.ToString().c_str());
+			obs_log(LOG_ERROR, "Failed to load SPM: %s", status.ToString().c_str());
 			global_context.error_callback("Failed to load SPM. " + status.ToString());
 			return OBS_POLYGLOT_TRANSLATION_INIT_FAIL;
 		}
@@ -44,12 +49,33 @@ int build_translation_context()
 		global_context.options->use_vmap = true;
 		global_context.options->return_scores = false;
 	} catch (std::exception &e) {
-		obs_log(LOG_ERROR, "Error: %s", e.what());
+		obs_log(LOG_ERROR, "Failed to load CT2 model: %s", e.what());
 		global_context.error_callback("Failed to load CT2 model. " + std::string(e.what()));
 		return OBS_POLYGLOT_TRANSLATION_INIT_FAIL;
 	}
 	global_context.error_callback(""); // Clear any errors
+	global_context.status_callback("Translation engine ready");
 	return OBS_POLYGLOT_TRANSLATION_INIT_SUCCESS;
+}
+
+int translate_from_json(const std::string &body, std::string &result)
+{
+	std::string input_text;
+	std::string source_lang;
+	std::string target_lang;
+	// parse body json
+	try {
+		nlohmann::json j = nlohmann::json::parse(body);
+		input_text = j["text"];
+		source_lang = j["source_lang"];
+		target_lang = j["target_lang"];
+	} catch (std::exception &e) {
+		obs_log(LOG_ERROR, "Error: %s", e.what());
+		result = "Error parsing json";
+		return OBS_POLYGLOT_TRANSLATION_FAIL;
+	}
+
+	return translate(input_text, source_lang, target_lang, result);
 }
 
 int translate(const std::string &text, const std::string &source_lang,

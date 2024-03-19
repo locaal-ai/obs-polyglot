@@ -33,6 +33,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QLabel" name="label_status">
+      <property name="text">
+       <string>Status Label</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="errorLabel">
       <property name="text">
        <string>Error Label</string>

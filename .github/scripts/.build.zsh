@@ -230,8 +230,7 @@ ${_usage_host:-}"
           -DCODESIGN_IDENTITY=${CODESIGN_IDENT:--}
         )
 
-        # TODO: enable -arch arm64
-        cmake_build_args+=(--preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=NO -arch x86_64 -arch arm64)
+        cmake_build_args+=(--preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=NO -arch arm64 -arch x86_64)
         cmake_install_args+=(build_macos --config ${config} --prefix "${project_root}/release/${config}")
 
         local -a xcbeautify_opts=()
@@ -243,6 +242,7 @@ ${_usage_host:-}"
           -G "${generator}"
           -DQT_VERSION=${QT_VERSION:-6}
           -DCMAKE_BUILD_TYPE=${config}
+          -DCMAKE_INSTALL_PREFIX=/usr
         )
 
         local cmake_version

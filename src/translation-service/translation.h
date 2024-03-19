@@ -12,6 +12,7 @@ int build_translation_context();
 #include <string>
 int translate(const std::string &text, const std::string &source_lang,
 	      const std::string &target_lang, std::string &result);
+int translate_from_json(const std::string &body, std::string &result);
 #endif
 
 #define OBS_POLYGLOT_TRANSLATION_INIT_FAIL -1
