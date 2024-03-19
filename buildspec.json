@@ -45,13 +45,13 @@
         }
     },
     "name": "obs-polyglot",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "author": "Roy Shilkrot",
-    "website": "https://github.com/obs-ai/obs-polyglot",
+    "website": "https://github.com/occ-ai/obs-polyglot",
     "email": "roy.shil@gmail.com",
     "uuids": {
-        "macosPackage": "00000000-0000-0000-0000-000000000000",
-        "macosInstaller": "00000000-0000-0000-0000-000000000000",
-        "windowsApp": "00000000-0000-0000-0000-000000000000"
+        "macosPackage": "D83C2134-8035-481B-9FF7-DAD5D52B0143",
+        "macosInstaller": "0ECB75BF-B834-405A-91CE-A035E3958F0E",
+        "windowsApp": "71CCA158-E583-43D3-9923-3CB6FD3B6109"
     }
 }
