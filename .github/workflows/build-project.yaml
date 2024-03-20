@@ -236,8 +236,9 @@ jobs:
         id: cuda-toolkit
         with:
           cuda: ${{ matrix.cuda }}
-          sub-packages: '["nvcc", "libcublas"]'
-          method: 'network'
+          sub-packages: '["nvcc"]'
+          non-cuda-sub-packages: '["libcublas"]'
+          method: 'local'
 
       - name: Set Up Environment 🔧
         id: setup
