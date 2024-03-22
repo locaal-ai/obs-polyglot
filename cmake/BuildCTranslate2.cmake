@@ -19,10 +19,35 @@ if(APPLE)
 
 elseif(WIN32)
 
-  FetchContent_Declare(
-    ctranslate2_fetch
-    URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.1.1/libctranslate2-windows-4.1.1-Release.zip
-    URL_HASH SHA256=aa87073e663e4dfbbc9b9360d83bed847212309bea433c3b1888a33a51cb0db0)
+  # check CPU_OR_CUDA environment variable
+  if(NOT DEFINED ENV{CPU_OR_CUDA})
+    message(FATAL_ERROR "Please set the CPU_OR_CUDA environment variable to either CPU or CUDA")
+  endif()
+
+  if($ENV{CPU_OR_CUDA} STREQUAL "cpu")
+    FetchContent_Declare(
+      ctranslate2_fetch
+      URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.2.0/libctranslate2-windows-4.1.1-Release-cpu.zip
+      URL_HASH SHA256=30ff8b2499b8d3b5a6c4d6f7f8ddbc89e745ff06e0050b645e3b7c9b369451a3
+    )
+  else()
+    if($ENV{CPU_OR_CUDA} STREQUAL "12.2.0")
+      FetchContent_Declare(
+        ctranslate2_fetch
+        URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.2.0/libctranslate2-windows-4.1.1-Release-cuda12.2.0.zip
+        URL_HASH SHA256=131724d510f9f2829970953a1bc9e4e8fb7b4cbc8218e32270dcfe6172a51558
+      )
+    elseif($ENV{CPU_OR_CUDA} STREQUAL "11.8.0")
+      FetchContent_Declare(
+        ctranslate2_fetch
+        URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.2.0/libctranslate2-windows-4.1.1-Release-cuda11.8.0.zip
+        URL_HASH SHA256=a120bee82f821df35a4646add30ac18b5c23e4e16b56fa7ba338eeae336e0d81
+      )
+    else()
+      message(FATAL_ERROR "Unsupported CUDA version: $ENV{CPU_OR_CUDA}")
+    endif()
+  endif()
+
   FetchContent_MakeAvailable(ctranslate2_fetch)
 
   add_library(ct2 INTERFACE)
@@ -30,9 +55,8 @@ elseif(WIN32)
   set_target_properties(ct2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${ctranslate2_fetch_SOURCE_DIR}/include)
   target_compile_options(ct2 INTERFACE /wd4267 /wd4244 /wd4305 /wd4996 /wd4099)
 
-  install(FILES ${ctranslate2_fetch_SOURCE_DIR}/bin/ctranslate2.dll ${ctranslate2_fetch_SOURCE_DIR}/bin/libopenblas.dll
-          DESTINATION "obs-plugins/64bit")
-
+  file(GLOB CT2_DLLS ${ctranslate2_fetch_SOURCE_DIR}/bin/*.dll)
+  install(FILES ${CT2_DLLS} DESTINATION "obs-plugins/64bit")
 else()
   set(CT2_VERSION "4.1.1")
   set(CT2_URL "https://github.com/OpenNMT/CTranslate2.git")

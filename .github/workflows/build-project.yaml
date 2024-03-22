@@ -231,15 +231,6 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - uses: Jimver/cuda-toolkit@v0.2.14
-        if: matrix.cuda != 'cpu'
-        id: cuda-toolkit
-        with:
-          cuda: ${{ matrix.cuda }}
-          sub-packages: '["nvcc"]'
-          non-cuda-sub-packages: '["libcublas"]'
-          method: 'local'
-
       - name: Set Up Environment 🔧
         id: setup
         run: |
@@ -260,6 +251,8 @@ jobs:
         with:
           target: x64
           config: ${{ needs.check-event.outputs.config }}
+        env:
+          CPU_OR_CUDA: ${{ matrix.cuda }}
 
       - name: Package Plugin 📀
         uses: ./.github/actions/package-plugin
