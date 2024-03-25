@@ -31,6 +31,10 @@ elseif(WIN32)
       URL_HASH SHA256=30ff8b2499b8d3b5a6c4d6f7f8ddbc89e745ff06e0050b645e3b7c9b369451a3
     )
   else()
+    # add compile definitions for CUDA
+    add_compile_definitions(POLYGLOT_WITH_CUDA)
+    add_compile_definitions(POLYGLOT_CUDA_VERSION=$ENV{CPU_OR_CUDA})
+
     if($ENV{CPU_OR_CUDA} STREQUAL "12.2.0")
       FetchContent_Declare(
         ctranslate2_fetch
