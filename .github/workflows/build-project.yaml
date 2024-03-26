@@ -219,6 +219,9 @@ jobs:
     name: Build for Windows 🪟
     runs-on: windows-2022
     needs: check-event
+    strategy:
+      matrix:
+        cuda: [ 'cpu', '12.2.0', '11.8.0' ]
     defaults:
       run:
         shell: pwsh
@@ -248,6 +251,8 @@ jobs:
         with:
           target: x64
           config: ${{ needs.check-event.outputs.config }}
+        env:
+          CPU_OR_CUDA: ${{ matrix.cuda }}
 
       - name: Package Plugin 📀
         uses: ./.github/actions/package-plugin
@@ -255,6 +260,8 @@ jobs:
           target: x64
           config: ${{ needs.check-event.outputs.config }}
           package: ${{ fromJSON(needs.check-event.outputs.package) }}
+        env:
+          CPU_OR_CUDA: ${{ matrix.cuda }}
 
       - name: Upload Artifacts 📡
         uses: actions/upload-artifact@v3

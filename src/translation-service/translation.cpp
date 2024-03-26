@@ -38,9 +38,17 @@ int build_translation_context()
 
 		obs_log(LOG_INFO, "Loading CT2 model from %s",
 			global_config.local_model_path.c_str());
+
+#ifdef POLYGLOT_WITH_CUDA
+		ctranslate2::Device device = ctranslate2::Device::CUDA;
+		obs_log(LOG_INFO, "Using CUDA");
+#else
+		ctranslate2::Device device = ctranslate2::Device::CPU;
+		obs_log(LOG_INFO, "Using CPU");
+#endif
+
 		global_context.translator = new ctranslate2::Translator(
-			global_config.local_model_path, ctranslate2::Device::CPU,
-			ctranslate2::ComputeType::AUTO);
+			global_config.local_model_path, device, ctranslate2::ComputeType::AUTO);
 		obs_log(LOG_INFO, "CT2 Model loaded");
 
 		global_context.options = new ctranslate2::TranslationOptions;

@@ -21,6 +21,15 @@ void start_http_server()
 		}
 		global_context.svr = new httplib::Server();
 
+		global_context.svr->set_pre_routing_handler([](const httplib::Request &,
+							       httplib::Response &res) {
+			res.set_header("Access-Control-Allow-Origin", "*");
+			res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+			res.set_header("Access-Control-Allow-Headers",
+				       "Content-Type, Authorization");
+			return httplib::Server::HandlerResponse::Unhandled;
+		});
+
 		// set an echo handler
 		global_context.svr->Post("/echo", [](const httplib::Request &req,
 						     httplib::Response &res,

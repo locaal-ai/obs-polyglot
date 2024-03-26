@@ -48,7 +48,14 @@ function Package {
     $ProductName = $BuildSpec.name
     $ProductVersion = $BuildSpec.version
 
-    $OutputName = "${ProductName}-${ProductVersion}-windows-${Target}"
+    # check the CPU_OR_CUDA env variable to determine the target
+    if ( $Env:CPU_OR_CUDA -eq 'cpu' ) {
+        $cudaName = 'cpu'
+    } else {
+        $cudaName = "cuda${Env:CPU_OR_CUDA}"
+    }
+
+    $OutputName = "${ProductName}-${ProductVersion}-windows-${Target}-${cudaName}"
 
     if ( ! $SkipDeps ) {
         Install-BuildDependencies -WingetFile "${ScriptHome}/.Wingetfile"
