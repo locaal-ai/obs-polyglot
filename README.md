@@ -1,4 +1,6 @@
-# Ployglot - Translation AI assistant OBS Plugin
+# ⚠️ Stalled ⚠️ This project is not under active development
+
+## Ployglot - Translation AI assistant OBS Plugin
 
 <div align="center">
 
